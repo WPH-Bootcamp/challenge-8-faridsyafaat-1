@@ -1,21 +1,58 @@
 import { useQuery } from '@tanstack/react-query';
-// import { movieService } from '@/services/movieService';
 
-// TODO: Create custom hooks using React Query
-// Reference: https://tanstack.com/query/latest/docs/framework/react/overview
+import { QUERY_KEYS } from '@/lib/constants';
+import { movieService } from '@/services/movieService';
 
-// Example: Hook to fetch popular movies
-export const usePopularMovies = () => {
-  // TODO: Implement useQuery hook
-  // Hint: Use movieService.getPopularMovies as queryFn
-  return useQuery({
-    queryKey: ['movies', 'popular'],
-    queryFn: () => {
-      // TODO: Call your movie service function
-      throw new Error('Not implemented');
-    },
+// Popular Movies
+export const usePopularMovies = (page: number = 1) =>
+  useQuery({
+    queryKey: QUERY_KEYS.movies.popular(page),
+    queryFn: () => movieService.getPopularMovies(page),
   });
-};
 
-// TODO: Add more hooks for different endpoints
-// Examples: useMovieDetails, useSearchMovies, useNowPlayingMovies
+// Now Playing Movies
+export const useNowPlayingMovies = (page: number = 1) =>
+  useQuery({
+    queryKey: QUERY_KEYS.movies.nowPlaying(page),
+    queryFn: () => movieService.getNowPlayingMovies(page),
+  });
+
+// Movie Detail
+export const useMovieDetails = (id: number) =>
+  useQuery({
+    queryKey: QUERY_KEYS.movies.details(id),
+    queryFn: () => movieService.getMovieDetails(id),
+    enabled: Number.isFinite(id),
+  });
+
+// Movie Credits
+export const useMovieCredits = (id: number) =>
+  useQuery({
+    queryKey: QUERY_KEYS.movies.credits(id),
+    queryFn: () => movieService.getMovieCredits(id),
+    enabled: Number.isFinite(id),
+  });
+
+// Movie Videos
+export const useMovieVideos = (id: number) =>
+  useQuery({
+    queryKey: QUERY_KEYS.movies.videos(id),
+    queryFn: () => movieService.getMovieVideos(id),
+    enabled: Number.isFinite(id),
+  });
+
+// Similar Movies
+export const useSimilarMovies = (id: number) =>
+  useQuery({
+    queryKey: QUERY_KEYS.movies.similar(id),
+    queryFn: () => movieService.getSimilarMovies(id),
+    enabled: Number.isFinite(id),
+  });
+
+// Search Movie
+export const useSearchMovies = (query: string, page: number = 1) =>
+  useQuery({
+    queryKey: QUERY_KEYS.movies.search(query, page),
+    queryFn: () => movieService.searchMovies(query, page),
+    enabled: query.trim().length > 0,
+  });

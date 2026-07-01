@@ -1,21 +1,71 @@
 import api from '@/lib/axios';
-// import { Movie, MovieResponse } from '@/types/movie';
-
-// TODO: Create service functions to fetch data from TMDB API
-// Reference: https://developer.themoviedb.org/reference/intro/getting-started
+import type {
+  Movie,
+  MovieResponse,
+  CreditsResponse,
+  VideosResponse,
+} from '@/types/movie';
 
 export const movieService = {
-  // TODO: Implement getPopularMovies function
-  // Endpoint: GET /movie/popular
+  // Popular Movies
+  async getPopularMovies(page: number = 1): Promise<MovieResponse> {
+    const response = await api.get<MovieResponse>('/movie/popular', {
+      params: {
+        page,
+      },
+    });
 
-  // TODO: Implement getNowPlayingMovies function
-  // Endpoint: GET /movie/now_playing
+    return response.data;
+  },
 
-  // TODO: Implement getMovieDetails function
-  // Endpoint: GET /movie/{movie_id}
+  // Now Playing Movies
+  async getNowPlayingMovies(page: number = 1): Promise<MovieResponse> {
+    const response = await api.get<MovieResponse>('/movie/now_playing', {
+      params: {
+        page,
+      },
+    });
 
-  // TODO: Implement searchMovies function
-  // Endpoint: GET /search/movie
+    return response.data;
+  },
 
-  // TODO: Add more endpoints as needed
+  // Movie Detail
+  async getMovieDetails(id: number): Promise<Movie> {
+    const response = await api.get<Movie>(`/movie/${id}`);
+
+    return response.data;
+  },
+
+  // Movie Credits
+  async getMovieCredits(id: number): Promise<CreditsResponse> {
+    const response = await api.get<CreditsResponse>(`/movie/${id}/credits`);
+
+    return response.data;
+  },
+
+  // Movie Videos
+  async getMovieVideos(id: number): Promise<VideosResponse> {
+    const response = await api.get<VideosResponse>(`/movie/${id}/videos`);
+
+    return response.data;
+  },
+
+  // Similar Movies
+  async getSimilarMovies(id: number): Promise<MovieResponse> {
+    const response = await api.get<MovieResponse>(`/movie/${id}/similar`);
+
+    return response.data;
+  },
+
+  // Search Movie
+  async searchMovies(query: string, page: number = 1): Promise<MovieResponse> {
+    const response = await api.get<MovieResponse>('/search/movie', {
+      params: {
+        query,
+        page,
+      },
+    });
+
+    return response.data;
+  },
 };
